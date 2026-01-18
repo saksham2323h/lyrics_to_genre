@@ -16,6 +16,7 @@ from sklearn.metrics import accuracy_score
 DetectorFactory.seed = 42
 nltk.download("stopwords")
 STOP_WORDS = set(stopwords.words("english"))
+
 # Lowercasing, Remove punctuation characters and retain alpha-numeric part
 def clean_text(text):
     text = str(text).lower()
@@ -23,6 +24,8 @@ def clean_text(text):
     text = re.sub(r"[^a-zA-Z\u0900-\u097F\s]", "", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text
+
+# Multi-lingual Stemmer
 SUPPORTED_SNOWBALL = {
     "en": "english",
     "fr": "french",
@@ -50,12 +53,14 @@ def multilingual_stem(text):
         return " ".join(stemmer.stem(w) for w in text.split())
 
     return text
+
+# Reading train file
 df = pd.read_csv("train.csv")
 X = df["Lyrics"].apply(clean_text)
 X = X.apply(multilingual_stem)
-
-
 Y = df["Genre"]
+
+# Generating TF-IDF Vectorizer
 vectorizer = TfidfVectorizer(
     ngram_range=(1, 2),
     max_features=30000,
@@ -64,6 +69,7 @@ vectorizer = TfidfVectorizer(
     sublinear_tf=True
 )
 
+# Encoding label & dividing input data to obtain train & test
 X = vectorizer.fit_transform(X)
 label_encoder = LabelEncoder()
 Y_encoded = label_encoder.fit_transform(Y)
@@ -75,6 +81,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=Y_encoded
 )
 
+# Using Support Vector Machine to train the model
 model = LinearSVC(
     C=0.1,
     class_weight="balanced",
