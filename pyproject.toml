@@ -1,0 +1,18 @@
+[project]
+name = "shipathon"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "joblib>=1.5.3",
+    "langdetect>=1.0.9",
+    "linearsvc>=1.0.1",
+    "nltk>=3.9.2",
+    "pandas>=2.3.3",
+    "scikit-learn>=1.8.0",
+    "snowballstemmer>=3.0.1",
+    "spacy>=3.8.11",
+    "streamlit>=1.53.0",
+    "watchdog>=6.0.0",
+]
